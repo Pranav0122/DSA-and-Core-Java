@@ -1,6 +1,6 @@
 package Vaisehi;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class Person {
 
@@ -30,5 +30,21 @@ public class Person {
 ////        }
 //        Person ps=new Person();
 
+        Set<List<Integer>> set=new HashSet<>();
+        List<Integer> l1=new ArrayList<>();
+        l1.add(1);
+        l1.add(2);
+        set.add(l1);
+        List<Integer> l2=new ArrayList<>();
+        l2.add(3);
+        l2.add(4);
+        set.add(l2);
+        System.out.println(set);
+        Set<int[]> set1=new HashSet<>();
+        int[] a={1,2};
+        int[] a1={1,2};
+        set1.add(a);
+        set1.add(a1);
+        System.out.println(set1);
     }
 }
