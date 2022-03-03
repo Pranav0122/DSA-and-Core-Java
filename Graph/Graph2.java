@@ -9,10 +9,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Graph1 {
+public class Graph2 {
     int v;
     Map<Integer, List<Integer>> adjList;
-    public Graph1(int v){
+    public Graph2(int v){
         this.v=v;
         this.adjList=new HashMap<>();
     }
@@ -73,18 +73,34 @@ public class Graph1 {
             }
         }
     }
-
+    private void dfsHelper(int src){
+        dfs(src,new HashSet<>());
+    }
+    private void dfs(int src,Set<Integer> vis){
+        System.out.print(src+" ");
+        vis.add(src);
+        List<Integer> neighbours=adjList.getOrDefault(src,new ArrayList<>());
+        for(int neighbour:neighbours){
+            if(!vis.contains(neighbour)){
+                dfs(neighbour,vis);
+            }
+        }
+    }
     public static void main(String[] args) {
-       Graph1 graph=new Graph1(7);
-       graph.addEdge(1,2,true);
-       graph.addEdge(1,3,true);
-       graph.addEdge(2,4,true);
-       graph.addEdge(3,4,true);
-       graph.addEdge(3,5,true);
-       graph.addEdge(5,6,true);
-       graph.addEdge(6,7,false);
-       graph.display();
-//       graph.bfs(1);
-       graph.sssp(4);
+        Graph2 graph2=new Graph2(7);
+        graph2.addEdge(0,1,true);
+        graph2.addEdge(0,3,true);
+        graph2.addEdge(0,8,true);
+        graph2.addEdge(1,7,true);
+        graph2.addEdge(2,3,true);
+        graph2.addEdge(2,5,true);
+        graph2.addEdge(2,7,true);
+        graph2.addEdge(3,4,true);
+        graph2.addEdge(4,8,true);
+        graph2.addEdge(5,6,true);
+//        graph2.display();
+//       graph2.bfs(1);
+//        graph2.sssp(4);
+        graph2.dfsHelper(0);
     }
 }
