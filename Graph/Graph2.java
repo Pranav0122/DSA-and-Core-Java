@@ -86,21 +86,62 @@ public class Graph2 {
             }
         }
     }
+
+    private void bfsConn(int src,Set<Integer> vis){
+        Queue<Integer> q=new LinkedList<>();
+        q.add(src);
+        vis.add(src);
+        while(!q.isEmpty()){
+            int front=q.poll();
+            System.out.print(front+" ");
+            List<Integer> neighbourList=adjList.getOrDefault(front,new ArrayList<>());
+            for(int neighbour:neighbourList){
+                if(!vis.contains(neighbour)){
+                    q.add(neighbour);
+                    vis.add(neighbour);
+                }
+            }
+        }
+    }
+    private void connectedComponents(){
+        Set<Integer> vis=new HashSet<>();
+        int count=1;
+        for(int i = 1;i<=v;i++){
+            if(!vis.contains(i)){
+                System.out.print("CC"+count+"->");
+                bfsConn(i,vis); //through bfs
+//                dfs(i,vis); // through dfs
+                count++;
+                System.out.println();
+            }
+        }
+    }
     public static void main(String[] args) {
-        Graph2 graph2=new Graph2(7);
-        graph2.addEdge(0,1,true);
-        graph2.addEdge(0,3,true);
-        graph2.addEdge(0,8,true);
-        graph2.addEdge(1,7,true);
-        graph2.addEdge(2,3,true);
-        graph2.addEdge(2,5,true);
-        graph2.addEdge(2,7,true);
-        graph2.addEdge(3,4,true);
-        graph2.addEdge(4,8,true);
-        graph2.addEdge(5,6,true);
-//        graph2.display();
-//       graph2.bfs(1);
-//        graph2.sssp(4);
-        graph2.dfsHelper(0);
+        Graph2 graph2=new Graph2(10);
+        graph2.addEdge(1, 2, true);// undirected(bidir) edge
+        graph2.addEdge(1, 3, true);
+        graph2.addEdge(2, 4, true);
+        graph2.addEdge(3, 4, true);
+        graph2.addEdge(3, 5, true);
+        graph2.addEdge(5, 6, true);
+        graph2.addEdge(7, 8, true);
+        graph2.addEdge(9, 10, true);
+
+        graph2.connectedComponents();
+        //        graph2.display();
+        //        graph2.addEdge(0,1,true);
+        //        graph2.addEdge(0,3,true);
+        //        graph2.addEdge(0,8,true);
+        //        graph2.addEdge(1,7,true);
+        //        graph2.addEdge(2,3,true);
+        //        graph2.addEdge(2,5,true);
+        //        graph2.addEdge(2,7,true);
+        //        graph2.addEdge(3,4,true);
+        //        graph2.addEdge(4,8,true);
+        //        graph2.addEdge(5,6,true);
+        //        graph2.display();
+        //       graph2.bfs(1);
+        //        graph2.sssp(4);
+        //        graph2.dfsHelper(0);
     }
 }
