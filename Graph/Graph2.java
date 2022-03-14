@@ -1,5 +1,6 @@
 package Graph;
 
+import javax.sound.sampled.Line;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Queue;
@@ -10,17 +11,17 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Graph2 {
-    int v;
-    Map<Integer, List<Integer>> adjList;
-    public Graph2(int v){
-        this.v=v;
-        this.adjList=new HashMap<>();
+    int V;
+    Map<Integer,List<Integer>> adjList;
+    Graph2(int v){
+        V=v;
+        adjList=new HashMap<>();
     }
-    private void addEdge(int u,int v,boolean bidir){
-        List<Integer> neighnourU=adjList.getOrDefault(u,new ArrayList<>());
-        neighnourU.add(v);
-        adjList.put(u,neighnourU);
-        if(bidir){
+    private void addEdge(int u,int v,boolean directed){
+        List<Integer> neighbourU=adjList.getOrDefault(u,new ArrayList<>());
+        neighbourU.add(v);
+        adjList.put(u,neighbourU);
+        if(directed==true){
             List<Integer> neighbourV=adjList.getOrDefault(v,new ArrayList<>());
             neighbourV.add(u);
             adjList.put(v,neighbourV);
@@ -33,69 +34,29 @@ public class Graph2 {
         }
     }
 
-    private void bfs(int src){
-        Queue<Integer> q=new LinkedList<>();
-        Set<Integer> vis=new HashSet<>();
-        q.add(src);
-        vis.add(src);
-        while (!q.isEmpty()){
-            int front=q.poll();
-            System.out.print(front+" ");
-            List<Integer> neighbourList=adjList.getOrDefault(front,new ArrayList<>());
-            for(int neighbour:neighbourList){
-                if(!vis.contains(neighbour)){
-                    q.add(neighbour);
-                    vis.add(neighbour);
-                }
-            }
-        }
-    }
 
-    private void sssp(int src){
-        Map<Integer,Integer> dis=new HashMap<>();
-        for(int v=1;v<=this.v;v++){
-            dis.put(v,Integer.MAX_VALUE);
-        }
-        dis.put(src,0);
-        Queue<Integer> q=new LinkedList<>();
-        q.add(src);
-        while (!q.isEmpty()){
-            int front=q.poll();
-            List<Integer> neighbourList=adjList.getOrDefault(front,new ArrayList<>());
-            for(int neighbour:neighbourList){
-                if(dis.get(neighbour)==Integer.MAX_VALUE){
-                    q.add(neighbour);
-                    int frontDis=dis.get(front);
-                    int neighbourDis=frontDis+1;
-                    dis.put(neighbour,neighbourDis);
-                    System.out.println("Vertex " + neighbour + " is at a distance of " + neighbourDis + " from " + src);
-                }
-            }
-        }
-    }
     private void dfsHelper(int src){
         dfs(src,new HashSet<>());
     }
     private void dfs(int src,Set<Integer> vis){
         System.out.print(src+" ");
         vis.add(src);
-        List<Integer> neighbours=adjList.getOrDefault(src,new ArrayList<>());
-        for(int neighbour:neighbours){
+        List<Integer> neighboursList=adjList.getOrDefault(src,new ArrayList<>());
+        for(int neighbour:neighboursList){
             if(!vis.contains(neighbour)){
                 dfs(neighbour,vis);
             }
         }
     }
-
-    private void bfsConn(int src,Set<Integer> vis){
+    private void bfs(int src,Set<Integer> vis){
         Queue<Integer> q=new LinkedList<>();
         q.add(src);
         vis.add(src);
-        while(!q.isEmpty()){
+        while (!q.isEmpty()){
             int front=q.poll();
             System.out.print(front+" ");
-            List<Integer> neighbourList=adjList.getOrDefault(front,new ArrayList<>());
-            for(int neighbour:neighbourList){
+            List<Integer> neighboursList=adjList.getOrDefault(front,new ArrayList<>());
+            for(int neighbour:neighboursList){
                 if(!vis.contains(neighbour)){
                     q.add(neighbour);
                     vis.add(neighbour);
@@ -103,19 +64,34 @@ public class Graph2 {
             }
         }
     }
-    private void connectedComponents(){
+    private void connectedComponentsDFS(){
         Set<Integer> vis=new HashSet<>();
-        int count=1;
-        for(int i = 1;i<=v;i++){
+        int count=0;
+        for(int i=1;i<=V;i++){
             if(!vis.contains(i)){
-                System.out.print("CC"+count+"->");
-                bfsConn(i,vis); //through bfs
-//                dfs(i,vis); // through dfs
+                dfs(i,vis);
                 count++;
                 System.out.println();
             }
         }
+        System.out.println("Total number of Connected Components are:- "+count);
     }
+
+
+    private void connectedComponentsBFS(){
+        Set<Integer> vis=new HashSet<>();
+        int count=0;
+        for(int i=1;i<=V;i++){
+            if(!vis.contains(i)){
+                dfs(i,vis);
+                count++;
+                System.out.println();
+            }
+        }
+        System.out.println("Total number of Connected Components are:- "+count);
+    }
+
+
     public static void main(String[] args) {
         Graph2 graph2=new Graph2(10);
         graph2.addEdge(1, 2, true);// undirected(bidir) edge
@@ -127,8 +103,9 @@ public class Graph2 {
         graph2.addEdge(7, 8, true);
         graph2.addEdge(9, 10, true);
 
-        graph2.connectedComponents();
-        //        graph2.display();
+//        graph2.connectedComponentsDFS();
+        graph2.connectedComponentsBFS();
+//                graph2.display();
         //        graph2.addEdge(0,1,true);
         //        graph2.addEdge(0,3,true);
         //        graph2.addEdge(0,8,true);
@@ -140,7 +117,7 @@ public class Graph2 {
         //        graph2.addEdge(4,8,true);
         //        graph2.addEdge(5,6,true);
         //        graph2.display();
-        //       graph2.bfs(1);
+//               graph2.dfsHelper(1);
         //        graph2.sssp(4);
         //        graph2.dfsHelper(0);
     }
